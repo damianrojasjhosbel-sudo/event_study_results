@@ -1,0 +1,91 @@
+{
+  "id": "mmjs8oivbepq",
+  "timestamp": "2026-03-09T22:58:36.369Z",
+  "paper": {
+    "title": "Test Event Study",
+    "authors": "Test Author (2026)",
+    "description": "Testing the plotter pipeline"
+  },
+  "methodology": {
+    "identification_strategy": "DID with staggered treatment",
+    "code_language": "stata",
+    "code": "did_multiplegt_dyn Y G T D, placebo(4) effects(4)"
+  },
+  "qa": {
+    "reviewer_name": "Dr. Reviewer",
+    "reviewer_comments": "Are pre-trends significant?",
+    "author_response": "No, all placebos are insignificant"
+  },
+  "results": {
+    "confidence_level": 95,
+    "observations": 8,
+    "data": [
+      {
+        "period": -4,
+        "estimate": 0.0021,
+        "std_error": 0.0312,
+        "lb": -0.059052,
+        "ub": 0.063252
+      },
+      {
+        "period": -3,
+        "estimate": -0.0087,
+        "std_error": 0.0289,
+        "lb": -0.06534399999999999,
+        "ub": 0.047943999999999994
+      },
+      {
+        "period": -2,
+        "estimate": 0.0134,
+        "std_error": 0.0301,
+        "lb": -0.04559599999999999,
+        "ub": 0.07239599999999999
+      },
+      {
+        "period": -1,
+        "estimate": -0.0045,
+        "std_error": 0.0278,
+        "lb": -0.05898799999999999,
+        "ub": 0.049988
+      },
+      {
+        "period": 1,
+        "estimate": 0.0412,
+        "std_error": 0.0334,
+        "lb": -0.024263999999999994,
+        "ub": 0.106664
+      },
+      {
+        "period": 2,
+        "estimate": 0.0687,
+        "std_error": 0.0356,
+        "lb": -0.0010760000000000075,
+        "ub": 0.138476
+      },
+      {
+        "period": 3,
+        "estimate": 0.0891,
+        "std_error": 0.0389,
+        "lb": 0.012856000000000006,
+        "ub": 0.165344
+      },
+      {
+        "period": 4,
+        "estimate": 0.1023,
+        "std_error": 0.0421,
+        "lb": 0.01978400000000001,
+        "ub": 0.18481599999999998
+      }
+    ]
+  },
+  "github": {
+    "repo": "damianrojasjhosbel-sudo/event_study_results",
+    "csv_path": "event_study/csv/mmjs8oivbepq.csv",
+    "plot_path": "event_study/plots/mmjs8oivbepq.png",
+    "json_path": "event_study/json/mmjs8oivbepq.json"
+  },
+  "decision": {
+    "accepted": true,
+    "accepted_at": "2026-03-09T22:58:36.369Z"
+  }
+}
