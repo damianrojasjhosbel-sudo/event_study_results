@@ -1,0 +1,43 @@
+{
+  "id": "demo_gentzkow",
+  "timestamp": "2026-03-09T22:00:00.000Z",
+  "paper": {
+    "title": "Effect of Newspapers on Voter Turnout",
+    "authors": "Gentzkow, Shapiro & Sinkinson (2011)",
+    "description": "This paper estimates the effect of newspaper entry on political participation in US elections from 1868 to 1928, using county-level panel data on daily newspapers and presidential voter turnout."
+  },
+  "methodology": {
+    "identification_strategy": "Non-normalized event-study DID using did_multiplegt_dyn (de Chaisemartin & D'Haultfoeuille, 2024). Standard errors clustered at county level.",
+    "code_language": "stata",
+    "code": "did_multiplegt_dyn lnVoters lnPapers year county, graph_off placebo(4) effects(4) cluster(county)"
+  },
+  "qa": {
+    "reviewer_name": "Demo Reviewer",
+    "reviewer_comments": "Are the pre-treatment trends statistically significant? The placebos look clean.",
+    "author_response": "No, none of the placebo estimates are significant at the 5% level, supporting the parallel trends assumption."
+  },
+  "results": {
+    "confidence_level": 95,
+    "observations": 8,
+    "data": [
+      {"period": -4, "estimate": 0.00022, "std_error": 0.00496, "lb": -0.00950, "ub": 0.00994},
+      {"period": -3, "estimate": -0.00079, "std_error": 0.00412, "lb": -0.00887, "ub": 0.00729},
+      {"period": -2, "estimate": 0.00142, "std_error": 0.00459, "lb": -0.00758, "ub": 0.01042},
+      {"period": -1, "estimate": -0.00060, "std_error": 0.00563, "lb": -0.01163, "ub": 0.01043},
+      {"period": 1, "estimate": 0.01436, "std_error": 0.00530, "lb": 0.00397, "ub": 0.02475},
+      {"period": 2, "estimate": 0.01910, "std_error": 0.00598, "lb": 0.00738, "ub": 0.03082},
+      {"period": 3, "estimate": 0.02073, "std_error": 0.00689, "lb": 0.00723, "ub": 0.03423},
+      {"period": 4, "estimate": 0.02729, "std_error": 0.00834, "lb": 0.01094, "ub": 0.04364}
+    ]
+  },
+  "github": {
+    "repo": "damianrojasjhosbel-sudo/event_study_results",
+    "csv_path": "event_study/csv/demo_gentzkow.csv",
+    "plot_path": "event_study/plots/demo_gentzkow.png",
+    "json_path": "event_study/json/demo_gentzkow.json"
+  },
+  "decision": {
+    "accepted": true,
+    "accepted_at": "2026-03-09T22:00:00.000Z"
+  }
+}

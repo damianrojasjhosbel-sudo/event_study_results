@@ -12,7 +12,7 @@ Run from the repo root: python book/generate_book.py
 import json
 import os
 import glob
-from datetime import datetime
+from datetime import datetime, timezone
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 JSON_DIR = os.path.join(REPO_ROOT, "event_study", "json")
@@ -115,7 +115,7 @@ date: "{date}"
 
 The following {lang} code generated this event study:
 
-```{{{lang}}}
+```{lang}
 {code}
 ```
 
@@ -206,7 +206,7 @@ Each entry includes three sections:
 *Auto-generated on {now}*
 """.format(
         table=table,
-        now=datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),
+        now=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
     )
 
     fpath = os.path.join(REPO_ROOT, "index.qmd")
