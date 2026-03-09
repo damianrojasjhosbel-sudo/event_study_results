@@ -60,7 +60,7 @@ def generate_chapter(study, idx):
     table_header = "| Period | Estimate | Std. Error | LB {ci}% | UB {ci}% |".format(ci=ci)
     table_sep = "|--------|----------|------------|----------|----------|"
     table_rows = []
-    for row in data_rows[:3]:
+    for row in data_rows:
         table_rows.append(
             "| {period} | {est:.5f} | {se:.5f} | {lb:.5f} | {ub:.5f} |".format(
                 period=row["period"],
@@ -69,10 +69,6 @@ def generate_chapter(study, idx):
                 lb=row["lb"],
                 ub=row["ub"],
             )
-        )
-    if len(data_rows) > 3:
-        table_rows.append(
-            "| ... | *{n} more rows* | | | |".format(n=len(data_rows) - 3)
         )
 
     data_table = "\n".join([table_header, table_sep] + table_rows)
