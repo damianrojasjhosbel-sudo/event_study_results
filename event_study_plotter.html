@@ -375,7 +375,9 @@ async function acceptStudy() {
 
 function rejectStudy() {
   document.getElementById('inline-plot-section').style.display='none';
-  window.scrollTo({top:0,behavior:'smooth'}
+  window.scrollTo({top:0,behavior:'smooth'});
+  showToast('Results rejected. Modify your inputs and try again.','error');
+}
 </script>
 </body>
 </html>
