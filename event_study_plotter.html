@@ -158,8 +158,7 @@ body { font-family: 'Source Sans 3', sans-serif; color: var(--text); background:
 
 <script>
 // ============ CONFIG ============
-const FOLDER_ID = '1qOs1A83Yp2tGg-6hsR8wzUbdTK5gFhLx';
-const SA_EMAIL = 'event-study-plotter@angelic-backup-490503-f3.iam.gserviceaccount.com';
+const PROXY_URL = 'https://script.google.com/macros/s/AKfycbzNCgx4TNbJiU-JO2la476oy8Nlaji1adSyFngbbKb_fg-nzhy_LfidC_1bOloqK6pi/exec';
 
 // ============ STATE ============
 let parsedData = null, ciLevel = 95, codeLang = 'stata', csvRawText = '', currentId = null;
@@ -287,72 +286,15 @@ function generate() {
   document.getElementById('inline-plot-section').scrollIntoView({behavior:'smooth'});
 }
 
-// ============ SERVICE ACCOUNT JWT ============
-async function getServiceAccountToken() {
-  const privateKey = `-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC1/GdbvismKXZz\ng+ef/1UoyxCmzkX4BGmwf9WvD46idkIDKEuD/jebuo4Bz01TpcuhYICR+YyNNr9Y\nTDxtNhSHwW7mND4nNUUwjgYO7w7/4L2bCtzbHUC6FvmvHdzD66t5znbutcd3Ssob\ngsI/CZeeePQqzrgF5cExeiPJgzpHJFl8UMCjynUPDaP2bzqbby9kBcvhxiubZd1k\nV2n2DbOVwlje1/emuQJfJPMFB1DG0uJxK64OqpuMWHOXTuF/dMJAKQDKM5Krj3yT\nz4wnr19ueyQGKHKxKLZ4Couk+OEjWHBfTSdN0lvgKSX6canB+ZHYALGdrG06Xi6R\nR+BAEYZjAgMBAAECggEAMwv0thA2rEKvHiHew8tsSMAFELUFfVdHiiGhf7RebwW6\n6IXSANk7IeyHTsymRRNZdg/KoKeeHDJCI/Nmc7/arGW+xMXctUTE/qSn4GKAE5gn\ntyip4LBo6ontSYiX10Dw3X7jb3v/0l9hJ6xa7jGznNkSrDtF9SmIMmevSCQOIcwA\nTsKETQo875YZTJGHbl4AH4kp27yuDW7SeRIHUhSKDjfxmePoPMrstz/5mhI/vU76\nkTQ37Y4kFDgKoS5za+3OMkh2wtC8HGi9M+PSCoUNg3tFCa/SvmdFy/D/plcM9Lpb\n4418ZW9K+DiZDIvqK2350FPTcZxylrhg4WA9WAAVYQKBgQDbcbF0Prwj3+xjfYPS\n6bEwjDj/RgjXP4B9kM3w6W1cFV+EC0NHCzA2sD632zSXM01g+l9drKd4QmNYBKvA\nBvJwm0VAMLF98cDhTqRwrE98gJme6badgFh/Dj2tGXIlAitzwT0iNpyRhoeQIe3M\nANxoBhAJvwUWpPTNeXuaLfqU8wKBgQDUTUm8navRytXC1mD0I3gUoSonLxF1eSRj\n75rKjmBAvGuw1I/+vHBj7sgjp+HvRE0Jst0QpanSeMniQCq4C9sfaYAZESqkJZFd\no6fF5wjSOYBr2aFM2lVNuDhMqplkN+mQGBOAh/HXHO8mHb3GLEkjU42zj7keawkZ\n4RhlijVk0QKBgG7UJeZqxMRtlErPGmPMKPQ27ZZnfZGQfcls98XDbrsCBGKA+bKI\nwQnty086A36Vp2/iI4YA6/e9t8S9Xyy1lX4vvTLlJM9R6LMh78UEEYT0wiFTMiqr\npoZM3/NrlY2BYgatQr3jzQFma1Ls/9d3W9mhrjnt4pkEKKsZvsYokJTnAoGBAL2j\nkENAoFNVGR7ielZ6PHBJCitYOwMxRBVU2XMoPMh2xsd9CGcmkkph6DsZYpNk8l/A\newG8yXZtWQCWCtK+HGzxw3AgynM376KyZlI8LsAChzlPfGr2+I3lCb1KApzn6OVC\n7GC6jod1nBXzKSqVMnuwCcijrCfZBuqDzBWp3qSrBEZCqBUfQVz4CWGHWF91iaEw\nRYF4xMmEGS47/CKanQqT+Ulv/5JMoWaOvTDvWq/rVJhWlaqeU4sqV/asrsUm5Tse\nFhDoVOrcaZT4L4gEoTrgpiqMvN7/W0SJUBt+IUzlLOjD/mjOMzvmI6d4VQ2lHAqw\nzDIHSEC3subMCPhH5lwMyY8=\n-----END PRIVATE KEY-----\n`;
-
-  const now = Math.floor(Date.now() / 1000);
-  const header = { alg: 'RS256', typ: 'JWT' };
-  const payload = {
-    iss: SA_EMAIL,
-    scope: 'https://www.googleapis.com/auth/drive.file',
-    aud: 'https://oauth2.googleapis.com/token',
-    exp: now + 3600,
-    iat: now
-  };
-
-  const b64 = obj => btoa(JSON.stringify(obj)).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
-  const sigInput = b64(header) + '.' + b64(payload);
-
-  // Import private key
-  const pemBody = privateKey.replace(/-----BEGIN PRIVATE KEY-----|-----END PRIVATE KEY-----|\n/g,'');
-  const keyBytes = Uint8Array.from(atob(pemBody), c => c.charCodeAt(0));
-  const cryptoKey = await crypto.subtle.importKey(
-    'pkcs8', keyBytes.buffer,
-    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
-    false, ['sign']
-  );
-
-  const encoder = new TextEncoder();
-  const signature = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', cryptoKey, encoder.encode(sigInput));
-  const sigB64 = btoa(String.fromCharCode(...new Uint8Array(signature))).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
-  const jwt = sigInput + '.' + sigB64;
-
-  // Exchange JWT for access token
-  const res = await fetch('https://oauth2.googleapis.com/token', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}`
-  });
-  const data = await res.json();
-  if (!data.access_token) throw new Error('Failed to get access token: ' + JSON.stringify(data));
-  return data.access_token;
-}
-
-// ============ GDRIVE UPLOAD ============
-async function uploadToDrive(token, filename, content, mimeType) {
-  const meta = { name: filename, parents: [FOLDER_ID] };
-  const form = new FormData();
-  form.append('metadata', new Blob([JSON.stringify(meta)], {type:'application/json'}));
-  form.append('file', new Blob([content], {type: mimeType}));
-  const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink', {
-    method: 'POST', headers: { Authorization: 'Bearer ' + token }, body: form
-  });
-  return res.json();
-}
-
-async function uploadPngToDrive(token, filename, canvas) {
+// ============ CANVAS TO BASE64 ============
+function canvasToBase64(canvas) {
   return new Promise((resolve, reject) => {
-    canvas.toBlob(async blob => {
+    canvas.toBlob(blob => {
       if (!blob) { reject(new Error('Canvas toBlob failed')); return; }
-      const meta = { name: filename, parents: [FOLDER_ID] };
-      const form = new FormData();
-      form.append('metadata', new Blob([JSON.stringify(meta)], {type:'application/json'}));
-      form.append('file', blob);
-      const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink', {
-        method: 'POST', headers: { Authorization: 'Bearer ' + token }, body: form
-      });
-      resolve(await res.json());
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = () => reject(new Error('FileReader failed'));
+      reader.readAsDataURL(blob);
     }, 'image/png');
   });
 }
@@ -364,9 +306,6 @@ async function acceptStudy() {
   overlay.classList.add('active');
 
   try {
-    document.getElementById('saving-text').textContent = 'Connecting to Google Drive...';
-    const token = await getServiceAccountToken();
-
     const id = currentId;
     const title = document.getElementById('f-title').value.trim();
     const authors = document.getElementById('f-authors').value.trim();
@@ -375,14 +314,11 @@ async function acceptStudy() {
     const code = document.getElementById('f-code').value.trim();
     const ts = new Date().toISOString();
 
-    document.getElementById('saving-text').textContent = 'Saving CSV...';
-    await uploadToDrive(token, `${id}.csv`, csvRawText, 'text/csv');
+    document.getElementById('saving-text').textContent = 'Saving to Google Drive...';
 
-    document.getElementById('saving-text').textContent = 'Saving plot PNG...';
     const canvas = document.getElementById('es-canvas');
-    const pngFile = await uploadPngToDrive(token, `${id}.png`, canvas);
+    const pngB64 = await canvasToBase64(canvas);
 
-    document.getElementById('saving-text').textContent = 'Saving metadata JSON...';
     const jsonObj = {
       id, timestamp: ts,
       paper: { title, authors, description: desc },
@@ -396,21 +332,33 @@ async function acceptStudy() {
       },
       decision: { accepted: true, accepted_at: ts }
     };
-    await uploadToDrive(token, `${id}.json`, JSON.stringify(jsonObj, null, 2), 'application/json');
+
+    const payload = {
+      filename: id,
+      csv: csvRawText,
+      png: pngB64,
+      json: JSON.stringify(jsonObj, null, 2)
+    };
+
+    const res = await fetch(PROXY_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+
+    const result = await res.json();
 
     overlay.classList.remove('active');
-    const statusDiv = document.getElementById('gdrive-status');
-    statusDiv.style.display = 'block';
-    const badge = document.getElementById('gdrive-badge');
-    badge.className = 'gdrive-badge saved';
-    badge.textContent = '✓ Saved to Google Drive';
-    if (pngFile.webViewLink) {
-      const link = document.getElementById('gdrive-link');
-      link.style.display = 'block';
-      link.href = pngFile.webViewLink;
-      link.textContent = '🖼 Open plot in Google Drive';
+
+    if (result.success) {
+      const statusDiv = document.getElementById('gdrive-status');
+      statusDiv.style.display = 'block';
+      const badge = document.getElementById('gdrive-badge');
+      badge.className = 'gdrive-badge saved';
+      badge.textContent = '✓ Saved to Google Drive';
+      showToast('✓ Saved to Google Drive!', 'success');
+    } else {
+      throw new Error(result.error || 'Unknown error');
     }
-    showToast('✓ Saved to Google Drive!', 'success');
 
   } catch(err) {
     overlay.classList.remove('active');
@@ -427,9 +375,7 @@ async function acceptStudy() {
 
 function rejectStudy() {
   document.getElementById('inline-plot-section').style.display='none';
-  window.scrollTo({top:0,behavior:'smooth'});
-  showToast('Results rejected. Modify your inputs and try again.','error');
-}
+  window.scrollTo({top:0,behavior:'smooth'}
 </script>
 </body>
 </html>
