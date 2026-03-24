@@ -23,10 +23,9 @@ body { font-family: 'Source Sans 3', sans-serif; color: var(--text); background:
   border: 1px solid rgba(255,255,255,0.08); border-radius: 16px;
   padding: 48px 44px; backdrop-filter: blur(12px);
 }
-.form-card h1 { font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 900; color: #f0ead6; margin-bottom: 6px; }
-.form-card .subtitle { font-size: 15px; color: #888; margin-bottom: 32px; }
-.form-label { display: block; font-size: 15px; color: #be9b7b; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 600; margin-bottom: 8px; }
-.form-label span { font-weight: 400; color: #aaa; text-transform: none; letter-spacing: 0; font-size: 14px; }
+.form-card h1 { font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 900; color: #f0ead6; margin-bottom: 4px; }
+.form-card .subtitle { font-size: 15px; color: #888; margin-bottom: 32px; line-height: 1.5; }
+.form-label { display: block; font-size: 14px; color: #e0d6c8; font-weight: 400; margin-bottom: 8px; line-height: 1.5; }
 .form-input, .form-textarea {
   width: 100%; padding: 10px 14px; border-radius: 8px;
   border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04);
@@ -36,13 +35,6 @@ body { font-family: 'Source Sans 3', sans-serif; color: var(--text); background:
 .form-input:focus, .form-textarea:focus { border-color: #be9b7b; }
 .form-textarea { resize: vertical; min-height: 70px; }
 .form-input::placeholder, .form-textarea::placeholder { color: #555; }
-.ci-group { display: flex; gap: 8px; margin-bottom: 24px; }
-.ci-btn {
-  flex: 1; padding: 8px 0; border-radius: 6px; border: 1px solid rgba(255,255,255,0.12);
-  background: transparent; color: #888; cursor: pointer; font-family: 'Source Sans 3', sans-serif;
-  font-size: 14px; font-weight: 600; transition: all 0.2s;
-}
-.ci-btn.active { border-color: #be9b7b; background: rgba(190,155,123,0.15); color: #be9b7b; }
 .upload-zone {
   border: 2px dashed rgba(255,255,255,0.12); border-radius: 10px; padding: 28px 20px;
   text-align: center; cursor: pointer; margin-bottom: 8px; transition: all 0.2s;
@@ -76,21 +68,13 @@ body { font-family: 'Source Sans 3', sans-serif; color: var(--text); background:
 .gdrive-badge.saved { background: #d1fae5; color: #065f46; }
 .gdrive-badge.error { background: #fee2e2; color: #991b1b; }
 .gdrive-link { color: #be9b7b; font-size: 12px; word-break: break-all; display: block; margin-top: 6px; text-decoration: underline; }
-.form-section-label {
-  font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700;
-  color: #f0ead6; letter-spacing: 0.5px; margin: 28px 0 16px 0;
-  padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-.form-section-label:first-of-type { margin-top: 8px; }
-.word-counter {
-  font-size: 12px; color: #666; margin: -14px 0 18px 0; text-align: right;
-}
+.word-counter { font-size: 12px; color: #666; margin: -14px 0 18px 0; text-align: right; }
 .word-counter.over { color: #ef4444; font-weight: 600; }
 .radio-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
 .radio-option {
   display: flex; align-items: center; gap: 10px; font-size: 14px; color: #ccc;
   cursor: pointer; padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);
-  transition: all 0.2s;
+  transition: all 0.2s; line-height: 1.4;
 }
 .radio-option:hover { border-color: rgba(190,155,123,0.3); background: rgba(255,255,255,0.02); }
 .radio-option input[type="radio"] {
@@ -101,90 +85,82 @@ body { font-family: 'Source Sans 3', sans-serif; color: var(--text); background:
 .radio-option input[type="radio"]:checked {
   border-color: #be9b7b; background: #be9b7b; box-shadow: inset 0 0 0 3px #1a1a2e;
 }
+.divider { border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 28px 0; }
 </style>
 </head>
 <body>
 
 <div id="input-page">
   <div class="form-card">
-    <h1>Event Study Plotter</h1>
-    <p class="subtitle">Upload a CSV, visualize the event study, and save results to Google Drive automatically.</p>
+    <h1>Event-study</h1>
+    <p class="subtitle">graphs generated with the <strong style="color:#be9b7b;">did_multiplegt_dyn</strong> Stata, R, or Python package</p>
 
-    <!-- SECTION 1: Paper Info -->
-    <div class="form-section-label">Paper Information</div>
+    <label class="form-label">Paper title</label>
+    <input id="f-title" class="form-input" placeholder="Your answer">
 
-    <label class="form-label">Paper Title *</label>
-    <input id="f-title" class="form-input" placeholder="e.g. Effect of Newspapers on Voter Turnout">
-
-    <label class="form-label">Authors *</label>
-    <input id="f-authors" class="form-input" placeholder="e.g. Gentzkow, Shapiro & Sinkinson (2011)">
+    <label class="form-label">Authors</label>
+    <input id="f-authors" class="form-input" placeholder="Your answer">
 
     <label class="form-label">Link to the paper</label>
-    <input id="f-link" class="form-input" placeholder="e.g. https://doi.org/10.1257/aer.101.7.2980">
+    <input id="f-link" class="form-input" placeholder="Your answer">
 
-    <label class="form-label">Figure number <span>— where the event-study graph appears in the paper</span></label>
-    <input id="f-fignum" class="form-input" placeholder="e.g. Figure 3">
+    <label class="form-label">Number of the figure where the event-study graph you are submitting can be found in the paper.</label>
+    <input id="f-fignum" class="form-input" placeholder="Your answer">
 
-    <label class="form-label">Main takeaway <span>— one sentence, max 20 words</span></label>
-    <input id="f-takeaway" class="form-input" maxlength="200" placeholder="e.g. X has a positive effect on Y" oninput="updateWordCount(this,'wc-takeaway',20)">
+    <label class="form-label">The main take away from your event-study graph in one sentence (less than 20 words): will be the title of the page on which your graph appears. E.g.: X has a positive effect on Y</label>
+    <input id="f-takeaway" class="form-input" placeholder="Your answer" oninput="updateWordCount(this,'wc-takeaway',20)">
     <p class="word-counter" id="wc-takeaway">0 / 20 words</p>
 
-    <label class="form-label">Description <span>— treatment, country, design, data, results, pre-trends (max 150 words)</span></label>
-    <textarea id="f-desc" class="form-textarea" rows="4" placeholder="What's the treatment? In which country? Who is affected? What's the design of your study and what is the identifying variation you leverage? What data have you used? What are the results? Do you have pre-trends?" oninput="updateWordCount(this,'wc-desc',150)"></textarea>
+    <label class="form-label">Slightly longer description of your event-study graph: what's the treatment? in which country? who is affected? what's the design of your study and what is the identifying variation you leverage (binary treatment with staggered adoption, continuous treatment, etc)? what data have you used? what are the results and how you interpret them? do you have pre-trends? (no more than 150 words)</label>
+    <textarea id="f-desc" class="form-textarea" rows="5" placeholder="Your answer" oninput="updateWordCount(this,'wc-desc',150)"></textarea>
     <p class="word-counter" id="wc-desc">0 / 150 words</p>
 
-    <!-- SECTION 2: Treatment Design -->
-    <div class="form-section-label">Treatment Design</div>
+    <hr class="divider">
 
-    <label class="form-label">Treatment type *</label>
-    <div class="ci-group">
-      <button class="ci-btn" data-treat="binary" onclick="setTreat(this,'treatType')">Binary</button>
-      <button class="ci-btn" data-treat="discrete" onclick="setTreat(this,'treatType')">Discrete</button>
-      <button class="ci-btn" data-treat="continuous" onclick="setTreat(this,'treatType')">Continuous</button>
+    <label class="form-label">Is your treatment binary, discrete, or continuous (each unit has a different value of the treatment)?</label>
+    <div class="radio-group">
+      <label class="radio-option"><input type="radio" name="treatType" value="binary"> Binary</label>
+      <label class="radio-option"><input type="radio" name="treatType" value="discrete"> Discrete</label>
+      <label class="radio-option"><input type="radio" name="treatType" value="continuous"> Continuous</label>
     </div>
 
-    <label class="form-label">Treatment changes <span>— how can units' treatment evolve?</span></label>
-    <div class="radio-group" id="treat-changes">
-      <label class="radio-option"><input type="radio" name="treatChange" value="one_increase"> At most one change (increase only)</label>
-      <label class="radio-option"><input type="radio" name="treatChange" value="one_either"> At most one change (increase or decrease)</label>
-      <label class="radio-option"><input type="radio" name="treatChange" value="multi_increase"> Multiple changes (increases only)</label>
-      <label class="radio-option"><input type="radio" name="treatChange" value="multi_either"> Multiple changes (increases or decreases)</label>
+    <label class="form-label">Can units' treatment change at most once over the study period or can units experience multiple treatment changes?</label>
+    <div class="radio-group">
+      <label class="radio-option"><input type="radio" name="treatChange" value="one_increase"> At most one change, and that change can only be an increase (e.g. from a treatment of zero to a treatment of one)</label>
+      <label class="radio-option"><input type="radio" name="treatChange" value="one_either"> At most one change, and for some units that change is an increase, while for other units it is a decrease</label>
+      <label class="radio-option"><input type="radio" name="treatChange" value="multi_increase"> Units can experience multiple treatment changes, but those changes can only be increases</label>
+      <label class="radio-option"><input type="radio" name="treatChange" value="multi_either"> Units can experience multiple treatment changes, and those changes can be increases or decreases</label>
     </div>
 
-    <label class="form-label">Treatment values at period 1</label>
-    <div class="ci-group">
-      <button class="ci-btn" data-tval="one" onclick="setTreat(this,'treatVal')">One value</button>
-      <button class="ci-btn" data-tval="two" onclick="setTreat(this,'treatVal')">Two values</button>
-      <button class="ci-btn" data-tval="three_plus" onclick="setTreat(this,'treatVal')">Three or more</button>
+    <label class="form-label">How many values does the treatment take at the first time period in your data?</label>
+    <div class="radio-group">
+      <label class="radio-option"><input type="radio" name="treatValues" value="one"> One value: all units have the same treatment at period one</label>
+      <label class="radio-option"><input type="radio" name="treatValues" value="two"> Two values</label>
+      <label class="radio-option"><input type="radio" name="treatValues" value="three_plus"> Three or more values</label>
     </div>
 
-    <!-- SECTION 3: Code & Data -->
-    <div class="form-section-label">Code & Data</div>
+    <hr class="divider">
 
-    <label class="form-label">Code Language *</label>
-    <div class="ci-group">
-      <button class="ci-btn active" data-lang="stata" onclick="setLang('stata')">Stata</button>
-      <button class="ci-btn" data-lang="r" onclick="setLang('r')">R</button>
-      <button class="ci-btn" data-lang="python" onclick="setLang('python')">Python</button>
+    <label class="form-label">Copy-paste the line of code running did_multiplegt_dyn that you ran to generate the event-study graph you submit.</label>
+    <textarea id="f-code" class="form-textarea" rows="4" placeholder="Your answer"></textarea>
+
+    <label class="form-label">Code language</label>
+    <div class="radio-group">
+      <label class="radio-option"><input type="radio" name="codeLang" value="stata" checked> Stata</label>
+      <label class="radio-option"><input type="radio" name="codeLang" value="r"> R</label>
+      <label class="radio-option"><input type="radio" name="codeLang" value="python"> Python</label>
     </div>
-
-    <label class="form-label">did_multiplegt_dyn Code <span>— paste the line of code you ran</span></label>
-    <textarea id="f-code" class="form-textarea" rows="4" placeholder="e.g. did_multiplegt_dyn Y G T D, effects(4) placebo(4)..."></textarea>
 
     <label class="form-label">Number of switchers for effect 1</label>
-    <input id="f-switchers" class="form-input" type="number" placeholder="e.g. 1200">
+    <input id="f-switchers" class="form-input" type="number" placeholder="Your answer">
 
     <label class="form-label">N for effect 1</label>
-    <input id="f-neffect" class="form-input" type="number" placeholder="e.g. 5000">
+    <input id="f-neffect" class="form-input" type="number" placeholder="Your answer">
 
-    <label class="form-label">Confidence Level</label>
-    <div class="ci-group">
-      <button class="ci-btn" data-ci="90" onclick="setCI(90)">90%</button>
-      <button class="ci-btn active" data-ci="95" onclick="setCI(95)">95%</button>
-      <button class="ci-btn" data-ci="99" onclick="setCI(99)">99%</button>
-    </div>
+    <hr class="divider">
 
-    <label class="form-label">CSV Data * <span>— columns: time_to_treatment, coefficient, standard_error</span></label>
+    <label class="form-label" style="font-size:16px; font-weight:600; color:#f0ead6;">CSV Data</label>
+    <p style="color:#999; font-size:14px; margin: -12px 0 14px 0; line-height:1.5;">Required columns: <strong style="color:#be9b7b;">time_to_treatment</strong>, <strong style="color:#be9b7b;">coefficient</strong>, <strong style="color:#be9b7b;">standard_error</strong></p>
     <div id="upload-zone" class="upload-zone" onclick="document.getElementById('file-input').click()">
       <input type="file" id="file-input" accept=".csv,.tsv,.txt" style="display:none" onchange="handleFile(event)">
       <p id="upload-text">Click to upload CSV or TSV file</p>
@@ -231,8 +207,8 @@ body { font-family: 'Source Sans 3', sans-serif; color: var(--text); background:
 const PROXY_URL = 'https://script.google.com/macros/s/AKfycbzNCgx4TNbJiU-JO2la476oy8Nlaji1adSyFngbbKb_fg-nzhy_LfidC_1bOloqK6pi/exec';
 
 // ============ STATE ============
-let parsedData = null, ciLevel = 95, codeLang = 'stata', csvRawText = '', currentId = null;
-let treatType = '', treatVal = '';
+let parsedData = null, csvRawText = '', currentId = null;
+const ciLevel = 95;
 const zMap = {90:1.645, 95:1.96, 99:2.576};
 
 function updateWordCount(el, counterId, max) {
@@ -241,13 +217,11 @@ function updateWordCount(el, counterId, max) {
   counter.textContent = words + ' / ' + max + ' words';
   counter.classList.toggle('over', words > max);
 }
-function setTreat(btn, stateVar) {
-  const group = btn.parentElement;
-  group.querySelectorAll('.ci-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  if (stateVar === 'treatType') treatType = btn.dataset.treat;
-  if (stateVar === 'treatVal') treatVal = btn.dataset.tval;
+function getRadio(name) {
+  const el = document.querySelector('input[name="'+name+'"]:checked');
+  return el ? el.value : '';
 }
+function showToast(msg,type='success') { const t=document.getElementById('toast'); t.textContent=msg; t.className='toast show '+type; setTimeout(()=>{t.className='toast';},4000); }
 
 const demoData = [
   {time:-4,coef:0.00022,se:0.00496},{time:-3,coef:-0.00079,se:0.00412},
@@ -258,10 +232,6 @@ const demoData = [
 const demoCSV = `time_to_treatment,coefficient,standard_error
 -4,0.00022,0.00496\n-3,-0.00079,0.00412\n-2,0.00142,0.00459\n-1,-0.00060,0.00563
 1,0.01436,0.00530\n2,0.01910,0.00598\n3,0.02073,0.00689\n4,0.02729,0.00834`;
-
-function setCI(lv) { ciLevel=lv; document.querySelectorAll('.ci-btn[data-ci]').forEach(b=>b.classList.toggle('active',+b.dataset.ci===lv)); }
-function setLang(l) { codeLang=l; document.querySelectorAll('.ci-btn[data-lang]').forEach(b=>b.classList.toggle('active',b.dataset.lang===l)); }
-function showToast(msg,type='success') { const t=document.getElementById('toast'); t.textContent=msg; t.className='toast show '+type; setTimeout(()=>{t.className='toast';},4000); }
 
 function handleFile(e) {
   const file=e.target.files[0]; if(!file) return;
@@ -277,17 +247,13 @@ function loadDemo() {
   updateWordCount(document.getElementById('f-takeaway'),'wc-takeaway',20);
   document.getElementById('f-desc').value='The treatment is the number of daily newspapers in a US county. Uses difference-in-differences with staggered and on-and-off treatment adoption. Data covers US counties from 1868 to 2004. Results show newspaper entry increases presidential voter turnout. Pre-trends are not significant.';
   updateWordCount(document.getElementById('f-desc'),'wc-desc',150);
+  document.querySelector('input[name="treatType"][value="discrete"]').checked=true;
+  document.querySelector('input[name="treatChange"][value="multi_either"]').checked=true;
+  document.querySelector('input[name="treatValues"][value="three_plus"]').checked=true;
   document.getElementById('f-code').value='did_multiplegt_dyn prestout cnty90 year numdailies, effects(4) placebo(4) effects_equal("all")';
+  document.querySelector('input[name="codeLang"][value="stata"]').checked=true;
   document.getElementById('f-switchers').value='1847';
   document.getElementById('f-neffect').value='39741';
-  // Set treatment type to discrete
-  document.querySelectorAll('[data-treat="discrete"]').forEach(b=>{b.classList.add('active');});
-  treatType='discrete';
-  // Set treatment changes
-  document.querySelector('input[name="treatChange"][value="multi_either"]').checked=true;
-  // Set treatment values at period 1
-  document.querySelectorAll('[data-tval="three_plus"]').forEach(b=>{b.classList.add('active');});
-  treatVal='three_plus';
   document.getElementById('upload-zone').classList.add('loaded');
   document.getElementById('upload-text').textContent='✓ Demo data loaded (8 observations)';
   document.getElementById('submit-btn').classList.add('ready');
@@ -354,7 +320,6 @@ function generate() {
   ctx.beginPath();ctx.moveTo(pad.left,sy(0));ctx.lineTo(W-pad.right,sy(0));ctx.stroke();ctx.setLineDash([]);
   ctx.strokeStyle='#ced4da'; ctx.lineWidth=0.8; ctx.setLineDash([4,4]);
   ctx.beginPath();ctx.moveTo(sx(0),pad.top);ctx.lineTo(sx(0),H-pad.bottom);ctx.stroke();ctx.setLineDash([]);
-  // connecting line with t=0 point
   const sortedWithZero=[...sorted];
   if(!sortedWithZero.find(d=>d.time===0)) {sortedWithZero.push({time:0,coef:0,se:0});sortedWithZero.sort((a,b)=>a.time-b.time);}
   ctx.strokeStyle='#adb5bd'; ctx.lineWidth=1.2; ctx.beginPath();
@@ -372,13 +337,13 @@ function generate() {
   sorted.forEach(d=>ctx.fillText(d.time,sx(d.time),H-pad.bottom+20));
   ctx.fillText('0',sx(0),H-pad.bottom+20);
   ctx.font='13px Source Sans 3';ctx.fillText('Periods since treatment',W/2,H-6);
-  ctx.save();ctx.translate(14,H/2);ctx.rotate(-Math.PI/2);ctx.fillText('Estimate and '+ciLevel+'% CI',0,0);ctx.restore();
+  ctx.save();ctx.translate(14,H/2);ctx.rotate(-Math.PI/2);ctx.fillText('Estimate and 95% CI',0,0);ctx.restore();
   const lx=W-pad.right-140;
   ctx.fillStyle='#2563eb';ctx.beginPath();ctx.arc(lx,pad.top+12,4,0,Math.PI*2);ctx.fill();
   ctx.fillStyle='#495057';ctx.font='12px Source Sans 3';ctx.textAlign='left';ctx.fillText('Placebos (pre)',lx+10,pad.top+16);
   ctx.fillStyle='#c0392b';ctx.beginPath();ctx.arc(lx+96,pad.top+12,4,0,Math.PI*2);ctx.fill();
   ctx.fillStyle='#495057';ctx.fillText('Effects (post)',lx+106,pad.top+16);
-  document.getElementById('plot-caption').textContent='Figure 1. Event-study estimates with '+ciLevel+'% confidence intervals. Blue = pre-treatment placebos. Red = post-treatment effects.';
+  document.getElementById('plot-caption').textContent='Figure 1. Event-study estimates with 95% confidence intervals. Blue = pre-treatment placebos. Red = post-treatment effects.';
   document.getElementById('inline-plot-section').style.display='block';
   document.getElementById('gdrive-status').style.display='none';
   document.getElementById('btn-accept').disabled=false;
@@ -415,8 +380,6 @@ async function acceptStudy() {
     const code = document.getElementById('f-code').value.trim();
     const switchers = document.getElementById('f-switchers').value.trim();
     const neffect = document.getElementById('f-neffect').value.trim();
-    const treatChangeEl = document.querySelector('input[name="treatChange"]:checked');
-    const treatChange = treatChangeEl ? treatChangeEl.value : '';
     const ts = new Date().toISOString();
 
     document.getElementById('saving-text').textContent = 'Saving to Google Drive...';
@@ -427,8 +390,17 @@ async function acceptStudy() {
     const jsonObj = {
       id, timestamp: ts,
       paper: { title, authors, link, figure_number: fignum, takeaway, description: desc },
-      treatment: { type: treatType, changes: treatChange, values_at_period1: treatVal },
-      methodology: { code_language: codeLang, code, switchers_effect1: switchers, n_effect1: neffect },
+      treatment: {
+        type: getRadio('treatType'),
+        changes: getRadio('treatChange'),
+        values_at_period1: getRadio('treatValues')
+      },
+      methodology: {
+        code_language: getRadio('codeLang'),
+        code,
+        switchers_effect1: switchers,
+        n_effect1: neffect
+      },
       results: {
         confidence_level: ciLevel, observations: parsedData.length,
         data: [...parsedData].sort((a,b)=>a.time-b.time).map(d => {
