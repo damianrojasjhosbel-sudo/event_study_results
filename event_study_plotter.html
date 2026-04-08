@@ -104,6 +104,12 @@ body { font-family: 'Source Sans 3', sans-serif; color: var(--text); background:
     <label class="form-label">Link to the paper</label>
     <input id="f-link" class="form-input" placeholder="Your answer">
 
+    <label class="form-label">Is the paper published?</label>
+    <div class="radio-group">
+      <label class="radio-option"><input type="radio" name="published" value="yes"> Yes</label>
+      <label class="radio-option"><input type="radio" name="published" value="no"> No</label>
+    </div>
+
     <label class="form-label">Number of the figure where the event-study graph you are submitting can be found in the paper.</label>
     <input id="f-fignum" class="form-input" placeholder="Your answer">
 
@@ -389,7 +395,7 @@ async function acceptStudy() {
 
     const jsonObj = {
       id, timestamp: ts,
-      paper: { title, authors, link, figure_number: fignum, takeaway, description: desc },
+      paper: { title, authors, link, published: getRadio('published'), figure_number: fignum, takeaway, description: desc },
       treatment: {
         type: getRadio('treatType'),
         changes: getRadio('treatChange'),
