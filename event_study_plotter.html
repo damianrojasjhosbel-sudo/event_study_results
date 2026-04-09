@@ -369,49 +369,13 @@ function canvasToBase64(canvas) {
   });
 }
 
-// ============ SEND VIA HIDDEN FORM (bypasses CORS) ============
-function sendViaForm(url, data) {
-  return new Promise((resolve, reject) => {
-    // Create hidden iframe
-    const iframeName = 'upload_iframe_' + Date.now();
-    const iframe = document.createElement('iframe');
-    iframe.name = iframeName;
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
-
-    // Create hidden form
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = url;
-    form.target = iframeName;
-    form.style.display = 'none';
-
-    // Add payload as hidden input
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'payload';
-    input.value = JSON.stringify(data);
-    form.appendChild(input);
-
-    document.body.appendChild(form);
-
-    // Listen for iframe load (means form was submitted)
-    iframe.onload = () => {
-      setTimeout(() => {
-        document.body.removeChild(form);
-        document.body.removeChild(iframe);
-        resolve();
-      }, 1000);
-    };
-
-    iframe.onerror = () => {
-      document.body.removeChild(form);
-      document.body.removeChild(iframe);
-      reject(new Error('Form submission failed'));
-    };
-
-    // Submit
-    form.submit();
+// ============ SEND DATA (bypasses CORS) ============
+function sendData(url, data) {
+  return new Promise((resolve) => {
+    const blob = new Blob([JSON.stringify(data)], { type: 'text/plain' });
+    navigator.sendBeacon(url, blob);
+    // sendBeacon doesn't return response, wait a moment then resolve
+    setTimeout(resolve, 2000);
   });
 }
 
@@ -471,7 +435,7 @@ async function acceptStudy() {
     };
 
     // Use hidden form + iframe to bypass CORS (forms are not subject to CORS)
-    await sendViaForm(PROXY_URL, payload);
+    await sendData(PROXY_URL, payload);
 
     overlay.classList.remove('active');
 
