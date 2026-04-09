@@ -210,7 +210,7 @@ body { font-family: 'Source Sans 3', sans-serif; color: var(--text); background:
 
 <script>
 // ============ CONFIG ============
-const PROXY_URL = 'https://script.google.com/macros/s/AKfycbyE66I1LBgc7LTurz16E1quhti5pCL1ZtZZnsITxH4wJRjvI5K4a1garofL2H6sI_ZxOw/exec';
+const PROXY_URL = 'https://script.google.com/macros/s/AKfycbyJ0MBfhdDbn1CWhAY0u9VtEYBdRV2s1Li41U5WFis8Kzr06aQwpjLCtKotHAjpcc_zww/exec';
 
 // ============ STATE ============
 let parsedData = null, csvRawText = '', currentId = null;
@@ -369,6 +369,52 @@ function canvasToBase64(canvas) {
   });
 }
 
+// ============ SEND VIA HIDDEN FORM (bypasses CORS) ============
+function sendViaForm(url, data) {
+  return new Promise((resolve, reject) => {
+    // Create hidden iframe
+    const iframeName = 'upload_iframe_' + Date.now();
+    const iframe = document.createElement('iframe');
+    iframe.name = iframeName;
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+
+    // Create hidden form
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = url;
+    form.target = iframeName;
+    form.style.display = 'none';
+
+    // Add payload as hidden input
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'payload';
+    input.value = JSON.stringify(data);
+    form.appendChild(input);
+
+    document.body.appendChild(form);
+
+    // Listen for iframe load (means form was submitted)
+    iframe.onload = () => {
+      setTimeout(() => {
+        document.body.removeChild(form);
+        document.body.removeChild(iframe);
+        resolve();
+      }, 1000);
+    };
+
+    iframe.onerror = () => {
+      document.body.removeChild(form);
+      document.body.removeChild(iframe);
+      reject(new Error('Form submission failed'));
+    };
+
+    // Submit
+    form.submit();
+  });
+}
+
 // ============ ACCEPT / REJECT ============
 async function acceptStudy() {
   document.getElementById('btn-accept').disabled = true;
@@ -424,15 +470,9 @@ async function acceptStudy() {
       json: JSON.stringify(jsonObj, null, 2)
     };
 
-    const res = await fetch(PROXY_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(payload)
-    });
+    // Use hidden form + iframe to bypass CORS (forms are not subject to CORS)
+    await sendViaForm(PROXY_URL, payload);
 
-    // no-cors mode returns opaque response, so we can't read result
-    // but if it didn't throw, it means it was sent successfully
     overlay.classList.remove('active');
 
     const statusDiv = document.getElementById('gdrive-status');
