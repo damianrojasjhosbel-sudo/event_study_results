@@ -210,7 +210,7 @@ body { font-family: 'Source Sans 3', sans-serif; color: var(--text); background:
 
 <script>
 // ============ CONFIG ============
-const PROXY_URL = 'https://script.google.com/macros/s/AKfycbzQyroA-KFbuj2UdUhqY0yxJjbicCBG9mZUpT_qEC_EjrPg3i8-XElxoBdDV0sGi2gj/exec';
+const PROXY_URL = 'https://script.google.com/macros/s/AKfycbzNCgx4TNbJiU-JO2la476oy8Nlaji1adSyFngbbKb_fg-nzhy_LfidC_1bOloqK6pi/exec';
 
 // ============ STATE ============
 let parsedData = null, csvRawText = '', currentId = null;
@@ -369,14 +369,12 @@ function canvasToBase64(canvas) {
   });
 }
 
-// ============ SEND DATA (bypasses CORS) ============
+// ============ SEND DATA ============
 function sendData(url, data) {
-  return new Promise((resolve) => {
-    const blob = new Blob([JSON.stringify(data)], { type: 'text/plain' });
-    navigator.sendBeacon(url, blob);
-    // sendBeacon doesn't return response, wait a moment then resolve
-    setTimeout(resolve, 2000);
-  });
+  return fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(data)
+  }).then(r => r.json());
 }
 
 // ============ ACCEPT / REJECT ============
@@ -435,16 +433,20 @@ async function acceptStudy() {
     };
 
     // Use hidden form + iframe to bypass CORS (forms are not subject to CORS)
-    await sendData(PROXY_URL, payload);
+    const result = await sendData(PROXY_URL, payload);
 
     overlay.classList.remove('active');
 
-    const statusDiv = document.getElementById('gdrive-status');
-    statusDiv.style.display = 'block';
-    const badge = document.getElementById('gdrive-badge');
-    badge.className = 'gdrive-badge saved';
-    badge.textContent = '✓ Saved to Google Drive';
-    showToast('✓ Saved to Google Drive!', 'success');
+    if (result.success) {
+      const statusDiv = document.getElementById('gdrive-status');
+      statusDiv.style.display = 'block';
+      const badge = document.getElementById('gdrive-badge');
+      badge.className = 'gdrive-badge saved';
+      badge.textContent = '✓ Saved to Google Drive';
+      showToast('✓ Saved to Google Drive!', 'success');
+    } else {
+      throw new Error(result.error || 'Unknown error');
+    }
 
   } catch(err) {
     overlay.classList.remove('active');
